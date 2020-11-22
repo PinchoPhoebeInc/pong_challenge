@@ -1,32 +1,45 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+// import logoImg from "./assets/logo.png";
+import paddle from './assets/player.png'
+import ball from './assets/ball.png'
 
 const config = {
   type: Phaser.AUTO,
-  parent: "phaser-example",
+  physics: {
+    default: 'arcade',
+  },
   width: 800,
   height: 600,
   scene: {
     preload: preload,
-    create: create
+    create: create,
+    update: update
   }
 };
 
-const game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
+var cursor;
+var player;
 
 function preload() {
-  this.load.image("logo", logoImg);
+  this.load.image("paddle", paddle);
+  this.load.image('ball', ball)
 }
 
 function create() {
-  const logo = this.add.image(400, 150, "logo");
+  cursor = this.input.keyboard.createCursorKeys()
+  console.log(cursor);
 
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
+  player = this.physics.add.sprite(780, 200, 'paddle');
+  player.setCollideWorldBounds(true);
+}
+
+function update(){
+  if(cursor.up.isDown){
+    player.setVelocityY(-150)
+  } else if(cursor.down.isDown){
+    player.setVelocityY(150)
+  } else{
+    player.setVelocityY(0)
+  }
 }
