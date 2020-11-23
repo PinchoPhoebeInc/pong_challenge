@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import {TwoPGame, OnePGame} from '../consts/SceneKeys'
+//import OnePGame from './OnePGame'
 
 
 export default class TitleScreen extends Phaser.Scene{
@@ -20,11 +22,11 @@ export default class TitleScreen extends Phaser.Scene{
     .setOrigin(0.5)
 
     this.input.keyboard.once('keydown-ONE', () => {
-      //this.scene.start(1PLGame)
+      this.scene.start(OnePGame)
     })
 
     this.input.keyboard.once('keydown-TWO', () =>{
-      //this.scene.start(2PLGame)
+      this.scene.start(TwoPGame)
     })
   }
 }
