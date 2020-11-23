@@ -62,8 +62,8 @@ function create() {
   this.physics.add.collider(ball, player, hit, null, this)
   this.physics.add.collider(ball, comp, hitComp, null, this);
 
-  compTextSc = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#F00' });
-  playerTextSc = this.add.text(700, 16, 'score: 0', { fontSize: '16px', fill: '#00F' });
+  compTextSc = this.add.text(16, 16, 'P2 Score: 0', { fontSize: '16px', fill: '#F00' });
+  playerTextSc = this.add.text(680, 16, 'P1 Score: 0', { fontSize: '16px', fill: '#00F' });
 }
 
 function update(){
@@ -89,18 +89,20 @@ function update(){
     comp.setVelocityY(0);
   }
 
-  if(ball.x==796)
+  if(ball.x==784)
   {
     compScore += 1;
-    compTextSc.setText('Score: ' + compScore);
+    compTextSc.setText('P2 Score: ' + compScore);
+    console.log('computer scored!')
     reset();
 
   }
 
-  if(ball.x==4)
+  if(ball.x==16)
   {
     playerScore += 1;
-    playerTextSc.setText('Score: ' + playerScore);
+    playerTextSc.setText('P1 Score: ' + playerScore);
+    console.log('player 1 scored!')
     reset();
   }
 }
