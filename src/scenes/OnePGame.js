@@ -100,11 +100,11 @@ class OnePGame extends Phaser.Scene {
     };
 
     this.leftScoreLabel = this.add
-      .text(300, 125, "0", scoreStyle)
+      .text(300, 50, "0", scoreStyle)
       .setOrigin(0.5, 0.5);
 
     this.rightScoreLabel = this.add
-      .text(500, 375, "0", scoreStyle)
+      .text(500, 50, "0", scoreStyle)
       .setOrigin(0.5, 0.5);
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -198,11 +198,13 @@ class OnePGame extends Phaser.Scene {
       this.incrementLeftScore();
     }
 
-    const maxScore = 7;
+    const maxScore = 2;
     if (this.leftScore >= maxScore) {
       this.gameState = GameState.PlayerWon;
+      console.log('player 1 won!')
     } else if (this.rightScore >= maxScore) {
       this.gameState = GameState.AIWon;
+      console.log('player 2 won!')
     }
 
     if (this.gameState === GameState.Running) {
