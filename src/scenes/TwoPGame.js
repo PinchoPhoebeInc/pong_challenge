@@ -10,12 +10,14 @@ let isGameStarted = false;
 let cursors;
 let paddleSpeed = 400;
 let keys = {};
-let velocityX = Phaser.Math.Between(-100, 100);
+let velocityX = Phaser.Math.Between(-500, 500);
 let velocityY = 100;
 let playerScore = 0;
 let compScore = 0;
 let playerScoreText;
 let compScoreText;
+let player1Text;
+let player2Text;
 
 const GameState = {
   Running: "running",
@@ -32,7 +34,8 @@ class TwoPGame extends Phaser.Scene {
   }
 
   init(){
-    this.gameState = GameState.Running
+    this.gameState = GameState.Running;
+
     this.playerScore = 0;
     this.compScore = 0;
 
@@ -40,6 +43,7 @@ class TwoPGame extends Phaser.Scene {
   }
 
   create() {
+
     ball = this.physics.add.sprite(
       this.physics.world.bounds.width / 2,
       this.physics.world.bounds.height / 2,
@@ -84,6 +88,20 @@ class TwoPGame extends Phaser.Scene {
       fill: "green",
     })
     .setOrigin(0.1, 0.1);
+
+    player1Text = this.add
+    .text(50, 30, "PLAYER 1", {
+      fontSize: "32px",
+      fill: "#F00",
+    })
+    .setOrigin(0.1, 0.1);
+
+    player2Text = this.add
+    .text(650, 30, "PLAYER 2", {
+      fontSize: "32px",
+      fill: "green",
+    })
+    .setOrigin(0.1, 0.1);
   }
 
   update() {
@@ -97,30 +115,26 @@ class TwoPGame extends Phaser.Scene {
       isGameStarted = true;
     }
 
+
     if (this.paused || this.gameState !== GameState.Running) {
       return;
     }
 
+
     if (ball.body.x > player.body.x) {
       compScore += 1;
       compScoreText.setText(compScore);
+      this.checkScore();
       this.reset();
     }
     if (ball.body.x < comp.body.x) {
       playerScore += 1;
       playerScoreText.setText(playerScore);
+      this.checkScore();
       this.reset();
     }
 
-    const maxScore = 2;
 
-    if(this.playerScore >= maxScore){
-      this.gameState = GameState.Player1Won
-      console.log('player 1 won!')
-    } else if(this.compScore >= maxScore){
-      this.gameState = GameState.Player2Won
-      console.log('player 2 won!')
-    }
 
     player.body.setVelocityY(0);
     comp.body.setVelocityY(0);
@@ -157,6 +171,26 @@ class TwoPGame extends Phaser.Scene {
     comp.y = 200;
     ball.setVelocityX(velocityX);
     ball.setVelocityY(velocityY);
+  }
+
+  checkScore(){
+
+    const maxScore = 2;
+
+    if(this.playerScore >= maxScore){
+      this.gameState = GameState.Player1Won
+      console.log('player 1 won!')
+    } else if(this.compScore >= maxScore){
+      this.gameState = GameState.Player2Won
+      console.log('player 2 won!')
+    }
+
+    if(this.gameState === GameState.Running){
+      this.reset()
+    } else {
+      this.ball.active = false;
+      this.physics.world.remove(this.ball.body);
+    }
   }
 
 }

@@ -3,7 +3,8 @@ import ballImg from "../assets/ball.png";
 import player1 from "../assets/player.png";
 import pc from "../assets/pc.png";
 
-//import { GameBackground, GameOver } from "../consts/SceneKeys";
+
+import { GameBackground, GameOver } from "../consts/SceneKeys";
 //import * as Colors from "../consts/Colors";
 //import * as AudioKeys from "../consts/AudioKeys";
 
@@ -20,6 +21,7 @@ class OnePGame extends Phaser.Scene {
     this.load.image("ballImg", ballImg);
     this.load.image("player1", player1);
     this.load.image("comp", pc);
+
   }
 
   init() {
@@ -34,8 +36,8 @@ class OnePGame extends Phaser.Scene {
   }
 
   create() {
-    //this.scene.run(GameBackground);
-    //this.scene.sendToBack(GameBackground);
+    this.scene.run(GameBackground);
+    this.scene.sendToBack(GameBackground);
 
     this.physics.world.setBounds(-100, 0, 1000, 500);
 
@@ -52,6 +54,14 @@ class OnePGame extends Phaser.Scene {
 
     this.ball.body.setCollideWorldBounds(true, 1, 1);
     this.ball.body.onWorldBounds = true;
+
+    // this.ball = this.physics.add.sprite(
+    //   this.physics.world.bounds.width / 2,
+    //   this.physics.world.bounds.height / 2,
+    //   "ballImg"
+    // );
+    // this.ball.setCollideWorldBounds(true);
+    // this.ball.setBounce(1, 1);
 
     //this.paddleLeft = this.add.rectangle(50, 250, 30, 100, Colors.White, 1);
     this.player = this.add.sprite(
@@ -71,7 +81,6 @@ class OnePGame extends Phaser.Scene {
     );
     this.physics.add.existing(this.comp, true);
     // this.comp.body.setCollideWorldBounds(true, 1, 1);
-
 
     this.physics.add.collider(
       this.player,
@@ -216,10 +225,10 @@ class OnePGame extends Phaser.Scene {
       //this.scene.stop(GameBackground);
 
       // show the game over/win screen
-      // this.scene.start(GameOver, {
-      //   leftScore: this.leftScore,
-      //   rightScore: this.rightScore,
-      // });
+      this.scene.start(GameOver, {
+        leftScore: this.leftScore,
+        rightScore: this.rightScore,
+      });
     }
   }
 
