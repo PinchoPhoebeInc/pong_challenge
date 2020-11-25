@@ -15,6 +15,8 @@ const GameState = {
   AIWon: "ai-won",
 };
 
+let keys = {}
+
 class OnePGame extends Phaser.Scene {
   preload() {
     this.load.image("ballImg", ballImg);
@@ -39,12 +41,7 @@ class OnePGame extends Phaser.Scene {
 
     this.physics.world.setBounds(-100, 0, 1000, 500);
 
-    this.ball = this.add.circle(80, 250, 10, Colors.White, 1);
-    // this.ball = this.add.sprite(
-    //   400,
-    //   250,
-    //   "ballImg"
-    // );
+    this.ball = this.add.circle(400, 250, 10, Colors.White, 1);
     this.physics.add.existing(this.ball);
     //this.ball.body.setCircle(10);
     this.ball.body.setBounce(1, 1);
@@ -93,15 +90,25 @@ class OnePGame extends Phaser.Scene {
       .text(500, 50, "0", scoreStyle)
       .setOrigin(0.5, 0.5);
 
-    this.cursors = this.input.keyboard.createCursorKeys();
-
-    this.pauseGame = this.add
-      .text(200, 550, "Press P for Pause")
+    this.playerText = this.add
+      .text(120, 50, "PLAYER 1",)
       .setOrigin(0.5, 0.5);
 
-    // this.resumeGame = this.add
-    //   .text(600, 550, "Press R for Resume")
-    //   .setOrigin(0.5, 0.5);
+    this.compText = this.add
+      .text(700, 50, "COMP",)
+      .setOrigin(0.5, 0.5);
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+    keys.p = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    keys.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+    this.pauseGame = this.add
+      .text(200, 550, "Press P to Pause")
+      .setOrigin(0.5, 0.5);
+
+    this.resumeGame = this.add
+      .text(600, 550, "Press R to Reset")
+      .setOrigin(0.5, 0.5);
 
     this.time.delayedCall(1500, () => {
       this.resetBall();
@@ -122,11 +129,6 @@ class OnePGame extends Phaser.Scene {
     this.updateAI();
     this.checkScore();
   }
-
-  // handleServeGame(player,ball)
-
-
-  // }
 
   handleBallWorldBoundsCollision(body, up, down, left, right) {
     if (left || right) {
@@ -155,18 +157,20 @@ class OnePGame extends Phaser.Scene {
     if (this.cursors.up.isDown) {
       this.player.y -= 10;
       body.updateFromGameObject();
-    } else if (this.cursors.down.isDown) {
+    }
+     if (this.cursors.down.isDown) {
       this.player.y += 10;
       body.updateFromGameObject();
     }
 
-    this.input.keyboard.once('keydown-P', () => {
+    if(keys.p.isDown){
       this.scene.pause()
-    })
+    }
 
-    // this.input.keyboard.once('keydown-R', () => {
-    //   this.scene.wake()
-    // })
+    if(keys.r.isDown){
+      this.scene.restart()
+    }
+
   }
 
   updateAI() {
@@ -210,7 +214,7 @@ class OnePGame extends Phaser.Scene {
       this.incrementLeftScore();
     }
 
-    const maxScore = 2;
+    const maxScore = 7;
     if (this.leftScore >= maxScore) {
       this.gameState = GameState.PlayerWon;
       console.log('player 1 won!')
@@ -246,8 +250,7 @@ class OnePGame extends Phaser.Scene {
   }
 
   resetBall() {
-    this.ball.setPosition(this.player.x
-      + 15, 400);
+    this.ball.setPosition(450,200);
 
     const angle = Phaser.Math.Between(0, 360);
     const vec = this.physics.velocityFromAngle(angle, 300);

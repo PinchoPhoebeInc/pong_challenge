@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import {TwoPGame, TitleScreen} from '../consts/SceneKeys'
-//import OnePGame from './OnePGame'
 
 export default class MainScreen extends Phaser.Scene{
 

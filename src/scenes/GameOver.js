@@ -12,11 +12,13 @@ export default class GameOver extends Phaser.Scene
 	create(data)
 	{
 
-    let titleText = 'Game Over, Computer Won!'
+    let titleText = 'Game Over'
 		if (data.leftScore > data.rightScore)
 		{
 			// player won
-			titleText = 'You Win!'
+			titleText = 'Player 1 Wins!'
+		} else {
+			titleText = 'Player 2 Wins!'
 		}
 
 		this.add.text(400, 200, titleText, {
