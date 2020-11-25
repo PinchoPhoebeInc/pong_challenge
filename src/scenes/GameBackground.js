@@ -6,12 +6,12 @@ export default class GameBackground extends Phaser.Scene
 {
 	preload()
 	{
-    this.load.image('park', park)
+   this.load.image('park', park)
 	}
 
 	create()
 	{
-    this.add.image(100	,100, 'park')
+     this.add.image(100	,100, 'park')
 
 
 		// this.add.line(

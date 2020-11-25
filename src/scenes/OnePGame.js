@@ -3,8 +3,7 @@ import ballImg from "../assets/ball.png";
 import player1 from "../assets/player.png";
 import pc from "../assets/pc.png";
 
-
-import { GameBackground, GameOver } from "../consts/SceneKeys";
+import { GameBackground, GameOver, MainScreen } from "../consts/SceneKeys";
 //import * as Colors from "../consts/Colors";
 //import * as AudioKeys from "../consts/AudioKeys";
 
@@ -38,6 +37,12 @@ class OnePGame extends Phaser.Scene {
   create() {
     this.scene.run(GameBackground);
     this.scene.sendToBack(GameBackground);
+    //this.scene.pause()
+    // this.scene.start(MainScreen);
+    // this.input.keyboard.once('keydown-SPACE', () => {
+    //   // this.scene.start(OnePGame)
+    //   this.scene.resume(this)
+    // })
 
     this.physics.world.setBounds(-100, 0, 1000, 500);
 
@@ -116,11 +121,24 @@ class OnePGame extends Phaser.Scene {
       .text(500, 50, "0", scoreStyle)
       .setOrigin(0.5, 0.5);
 
+
     this.cursors = this.input.keyboard.createCursorKeys();
+
+
+    this.pauseGame = this.add
+      .text(200, 550, "Press P for Pause")
+      .setOrigin(0.5, 0.5);
+
+    this.resumeGame = this.add
+      .text(600, 550, "Press R for Resume")
+      .setOrigin(0.5, 0.5);
+
 
     this.time.delayedCall(1500, () => {
       this.resetBall();
     });
+
+
   }
 
   update() {
@@ -164,7 +182,45 @@ class OnePGame extends Phaser.Scene {
       this.player.y += 10;
       body.updateFromGameObject();
     }
+
+    let keys = {}
+
+    keys.p = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    keys.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+    console.log(keys)
+
+    for(let key in keys){
+      console.log(key)
+      if(key === 'p'){
+          this.input.keyboard.once('keydown-P', () => {
+        // .text(400, 550, "Press P for Pause")
+        // .setOrigin(0.5, 0.5);
+        this.scene.pause()
+      })
+      } else {
+        this.input.keyboard.once('keydown-R', () => {
+
+          this.scene.launch(this)
+
+        },this)
+      }
+    }
+
+    // this.input.keyboard.once('keydown-P', () => {
+    //   // .text(400, 550, "Press P for Pause")
+    //   // .setOrigin(0.5, 0.5);
+    //   this.scene.pause()
+    //   this.pauseGame.destroy()
+    //   this.resumeGame = this.add
+    //   .text(400, 550, "Press R for Resume")
+    //   .setOrigin(0.5, 0.5);
+    // })
+
+
   }
+
+
 
   updateAI() {
     const diff = this.ball.y - this.comp.y;
@@ -222,7 +278,7 @@ class OnePGame extends Phaser.Scene {
       this.ball.active = false;
       this.physics.world.remove(this.ball.body);
 
-      //this.scene.stop(GameBackground);
+      this.scene.stop(GameBackground);
 
       // show the game over/win screen
       this.scene.start(GameOver, {
