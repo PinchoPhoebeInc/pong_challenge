@@ -21,8 +21,5 @@ export default class GameBackground extends Phaser.Scene
 			Colors.White, 1
 		)
 		.setLineWidth(2.5, 2.5)
-
-		this.add.circle(400, 250, 50)
-			.setStrokeStyle(5, Colors.White)
 	}
 }
