@@ -4,8 +4,8 @@ import player1 from "../assets/player.png";
 import pc from "../assets/pc.png";
 
 import { GameBackground, GameOver, MainScreen } from "../consts/SceneKeys";
-//import * as Colors from "../consts/Colors";
-//import * as AudioKeys from "../consts/AudioKeys";
+import * as Colors from "../consts/Colors";
+import * as Audio from "../consts/Audio";
 
 //import { PressStart2P } from "../consts/Fonts";
 
@@ -20,7 +20,6 @@ class OnePGame extends Phaser.Scene {
     this.load.image("ballImg", ballImg);
     this.load.image("player1", player1);
     this.load.image("comp", pc);
-
   }
 
   init() {
@@ -37,55 +36,28 @@ class OnePGame extends Phaser.Scene {
   create() {
     this.scene.run(GameBackground);
     this.scene.sendToBack(GameBackground);
-    //this.scene.pause()
-    // this.scene.start(MainScreen);
-    // this.input.keyboard.once('keydown-SPACE', () => {
-    //   // this.scene.start(OnePGame)
-    //   this.scene.resume(this)
-    // })
 
     this.physics.world.setBounds(-100, 0, 1000, 500);
 
-    //this.ball = this.add.circle(400, 250, 10, Colors.White, 1);
-    this.ball = this.add.sprite(
-      400,
-      250,
-      "ballImg"
-    );
+    this.ball = this.add.circle(80, 250, 10, Colors.White, 1);
+    // this.ball = this.add.sprite(
+    //   400,
+    //   250,
+    //   "ballImg"
+    // );
     this.physics.add.existing(this.ball);
     //this.ball.body.setCircle(10);
     this.ball.body.setBounce(1, 1);
     this.ball.body.setMaxSpeed(400);
-
     this.ball.body.setCollideWorldBounds(true, 1, 1);
     this.ball.body.onWorldBounds = true;
+    this.ball.setData('onPlayer', true)
 
-    // this.ball = this.physics.add.sprite(
-    //   this.physics.world.bounds.width / 2,
-    //   this.physics.world.bounds.height / 2,
-    //   "ballImg"
-    // );
-    // this.ball.setCollideWorldBounds(true);
-    // this.ball.setBounce(1, 1);
-
-    //this.paddleLeft = this.add.rectangle(50, 250, 30, 100, Colors.White, 1);
-    this.player = this.add.sprite(
-      50,
-      250,
-      "player1"
-    );
+    this.player = this.add.rectangle(50, 250, 30, 100, Colors.White, 1);
     this.physics.add.existing(this.player, true);
-    // this.player.body.setCollideWorldBounds(true);
-    // this.player.body.onWorldBounds = true;
 
-    //this.paddleRight = this.add.rectangle(750, 250, 30, 100, Colors.White, 1);
-    this.comp = this.add.sprite(
-      750,
-      250,
-      "comp"
-    );
+    this.comp = this.add.rectangle(750, 250, 30, 100, Colors.White, 1);
     this.physics.add.existing(this.comp, true);
-    // this.comp.body.setCollideWorldBounds(true, 1, 1);
 
     this.physics.add.collider(
       this.player,
@@ -121,24 +93,24 @@ class OnePGame extends Phaser.Scene {
       .text(500, 50, "0", scoreStyle)
       .setOrigin(0.5, 0.5);
 
-
     this.cursors = this.input.keyboard.createCursorKeys();
-
 
     this.pauseGame = this.add
       .text(200, 550, "Press P for Pause")
       .setOrigin(0.5, 0.5);
 
-    this.resumeGame = this.add
-      .text(600, 550, "Press R for Resume")
-      .setOrigin(0.5, 0.5);
-
+    // this.resumeGame = this.add
+    //   .text(600, 550, "Press R for Resume")
+    //   .setOrigin(0.5, 0.5);
 
     this.time.delayedCall(1500, () => {
       this.resetBall();
     });
 
+  }
 
+  togglePause(){
+    this.physics.arcade.isPaused = (this.physics.arcade.isPaused) ? false : true;
   }
 
   update() {
@@ -151,16 +123,21 @@ class OnePGame extends Phaser.Scene {
     this.checkScore();
   }
 
+  // handleServeGame(player,ball)
+
+
+  // }
+
   handleBallWorldBoundsCollision(body, up, down, left, right) {
     if (left || right) {
       return;
     }
 
-    //this.sound.play(AudioKeys.PongPlop);
+    //this.sound.play(Audio.PongPlop);
   }
 
   handlePaddleBallCollision(player, ball) {
-    //this.sound.play(AudioKeys.PongBeep);
+    //this.sound.play(Audio.PongBeep);
 
     /** @type {Phaser.Physics.Arcade.Body} */
     const body = this.ball.body;
@@ -183,44 +160,14 @@ class OnePGame extends Phaser.Scene {
       body.updateFromGameObject();
     }
 
-    let keys = {}
+    this.input.keyboard.once('keydown-P', () => {
+      this.scene.pause()
+    })
 
-    keys.p = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-    keys.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-
-    console.log(keys)
-
-    for(let key in keys){
-      console.log(key)
-      if(key === 'p'){
-          this.input.keyboard.once('keydown-P', () => {
-        // .text(400, 550, "Press P for Pause")
-        // .setOrigin(0.5, 0.5);
-        this.scene.pause()
-      })
-      } else {
-        this.input.keyboard.once('keydown-R', () => {
-
-          this.scene.launch(this)
-
-        },this)
-      }
-    }
-
-    // this.input.keyboard.once('keydown-P', () => {
-    //   // .text(400, 550, "Press P for Pause")
-    //   // .setOrigin(0.5, 0.5);
-    //   this.scene.pause()
-    //   this.pauseGame.destroy()
-    //   this.resumeGame = this.add
-    //   .text(400, 550, "Press R for Resume")
-    //   .setOrigin(0.5, 0.5);
+    // this.input.keyboard.once('keydown-R', () => {
+    //   this.scene.wake()
     // })
-
-
   }
-
-
 
   updateAI() {
     const diff = this.ball.y - this.comp.y;
@@ -299,7 +246,8 @@ class OnePGame extends Phaser.Scene {
   }
 
   resetBall() {
-    this.ball.setPosition(400, 250);
+    this.ball.setPosition(this.player.x
+      + 15, 400);
 
     const angle = Phaser.Math.Between(0, 360);
     const vec = this.physics.velocityFromAngle(angle, 300);
